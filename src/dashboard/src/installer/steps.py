@@ -46,15 +46,19 @@ def create_super_user(username, email, password, key):
     api_key, created = ApiKey.objects.update_or_create(user=user, defaults={'key': key})
 
 
+def set_agent_code(agent_code):
+    archivematica_agent = Agent.objects.get(pk=1)
+    archivematica_agent.identifiervalue = agent_code
+    archivematica_agent.save()
+
+
 def setup_pipeline(org_name, org_identifier):
     # Assign UUID to Dashboard
     dashboard_uuid = str(uuid.uuid4())
     helpers.set_setting('dashboard_uuid', dashboard_uuid)
 
     # Update Archivematica version in DB
-    archivematica_agent = Agent.objects.get(pk=1)
-    archivematica_agent.identifiervalue = django_settings.AGENT_CODE
-    archivematica_agent.save()
+    set_agent_code(django_settings.AGENT_CODE)
 
     if org_name != '' or org_identifier != '':
         agent = get_agent()
