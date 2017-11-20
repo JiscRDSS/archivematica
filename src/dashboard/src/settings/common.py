@@ -458,5 +458,5 @@ if SHIBBOLETH_AUTHENTICATION:
 # Apply email settings
 globals().update(email_settings.get_settings(config))
 
-VERSION_STRING = config.get('version')
+ARCHIVEMATICA_VERSION = config.get('version')
 AGENT_CODE = config.get('agent_code')
