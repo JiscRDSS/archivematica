@@ -29,7 +29,6 @@ from main.models import Agent, User
 import components.helpers as helpers
 import storageService as storage_service
 import utilities.FPRClient.client as FPRClient
-from version import get_version
 
 
 logger = logging.getLogger('archivematica.dashboard')
@@ -54,7 +53,7 @@ def setup_pipeline(org_name, org_identifier):
 
     # Update Archivematica version in DB
     archivematica_agent = Agent.objects.get(pk=1)
-    archivematica_agent.identifiervalue = "Archivematica-" + get_version()
+    archivematica_agent.identifiervalue = django_settings.AGENT_CODE
     archivematica_agent.save()
 
     if org_name != '' or org_identifier != '':

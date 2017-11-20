@@ -35,6 +35,8 @@ CONFIG_MAPPING = {
     'gearman_server': {'section': 'Dashboard', 'option': 'gearman_server', 'type': 'string'},
     'shibboleth_authentication': {'section': 'Dashboard', 'option': 'shibboleth_authentication', 'type': 'boolean'},
     'copy_files_timeout': {'section': 'Dashboard', 'option': 'copy_files_timeout', 'type': 'int'},
+    'version': {'section': 'Dashboard', 'option': 'version', 'type': 'string'},
+    'agent_code': {'section': 'Dashboard', 'option': 'agent_code', 'type': 'string'},
 
     # [client]
     'db_engine': {'section': 'client', 'option': 'engine', 'type': 'string'},
@@ -58,6 +60,8 @@ shibboleth_authentication = False
 copy_files_timeout = 300
 # django_allowed_hosts = ... Mandatory!
 # django_secret_key = ... Mandatory!
+version =
+agent_code =
 
 [client]
 user = archivematica
@@ -453,3 +457,6 @@ if SHIBBOLETH_AUTHENTICATION:
 
 # Apply email settings
 globals().update(email_settings.get_settings(config))
+
+VERSION_STRING = config.get('version')
+AGENT_CODE = config.get('agent_code')

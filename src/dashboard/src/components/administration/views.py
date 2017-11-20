@@ -444,6 +444,6 @@ def general(request):
 
 
 def version(request):
-    version = get_full_version()
+    version = django_settings.VERSION_STRING
     agent_code = models.Agent.objects.get(identifiertype="preservation system").identifiervalue
     return render(request, 'administration/version.html', locals())
