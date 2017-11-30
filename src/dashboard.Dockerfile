@@ -1,5 +1,7 @@
 FROM python:2.7
 
+ARG ARCHIVEMATICA_VERSION
+ARG AGENT_CODE
 ENV DEBIAN_FRONTEND noninteractive
 ENV DJANGO_SETTINGS_MODULE settings.common
 ENV PYTHONPATH /src/dashboard/src/:/src/archivematicaCommon/lib/
@@ -23,6 +25,7 @@ COPY dashboard/src/requirements/ /src/dashboard/src/requirements/
 RUN pip install -r /src/archivematicaCommon/requirements/production.txt -r /src/archivematicaCommon/requirements/dev.txt
 RUN pip install -r /src/dashboard/src/requirements/production.txt -r /src/dashboard/src/requirements/dev.txt
 
+
 RUN set -ex \
 	&& internalDirs=' \
 		/src/dashboard/src/static \
@@ -44,6 +47,10 @@ RUN chown -R archivematica:archivematica /src/dashboard/frontend/appraisal-tab \
 COPY archivematicaCommon/ /src/archivematicaCommon/
 COPY dashboard/ /src/dashboard/
 COPY dashboard/install/dashboard.gunicorn-config.py /etc/archivematica/dashboard.gunicorn-config.py
+RUN (echo "---"; \
+	 echo "version: $ARCHIVEMATICA_VERSION"; \
+	 echo "agent_code: $AGENT_CODE";) \
+		> /etc/archivematica/version.yml
 
 USER archivematica
 
