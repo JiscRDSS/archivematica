@@ -25,7 +25,6 @@ COPY dashboard/src/requirements/ /src/dashboard/src/requirements/
 RUN pip install -r /src/archivematicaCommon/requirements/production.txt -r /src/archivematicaCommon/requirements/dev.txt
 RUN pip install -r /src/dashboard/src/requirements/production.txt -r /src/dashboard/src/requirements/dev.txt
 
-
 RUN set -ex \
 	&& internalDirs=' \
 		/src/dashboard/src/static \
