@@ -20,6 +20,6 @@ def test_capture_output():
     # Test that stdout and stderr are not captured when `capture_output` is
     # not enabled.
     ret, std_out, std_err = execsub.launchSubProcess(
-        ['ls', '/tmp'], capture_output=True)
+        ['ls', '/tmp'], capture_output=False)
     assert std_out is ''
     assert std_err is ''
