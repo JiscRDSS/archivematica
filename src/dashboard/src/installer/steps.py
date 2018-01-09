@@ -55,20 +55,21 @@ def set_agent_code(agent_code):
 def setup_pipeline(org_name, org_identifier):
     dashboard_uuid = helpers.get_setting('dashboard_uuid')
     # Setup pipeline only if dashboard_uuid doesn't already exists
-    if not dashboard_uuid:
-        # Assign UUID to Dashboard
-        dashboard_uuid = str(uuid.uuid4())
-        helpers.set_setting('dashboard_uuid', dashboard_uuid)
+    if dashboard_uuid:
+        return
+    # Assign UUID to Dashboard
+    dashboard_uuid = str(uuid.uuid4())
+    helpers.set_setting('dashboard_uuid', dashboard_uuid)
 
-        # Update Archivematica version in DB
-        set_agent_code(django_settings.AGENT_CODE)
+    # Update Archivematica version in DB
+    set_agent_code(django_settings.AGENT_CODE)
 
-        if org_name != '' or org_identifier != '':
-            agent = get_agent()
-            agent.name = org_name
-            agent.identifiertype = 'repository code'
-            agent.identifiervalue = org_identifier
-            agent.save()
+    if org_name != '' or org_identifier != '':
+        agent = get_agent()
+        agent.name = org_name
+        agent.identifiertype = 'repository code'
+        agent.identifiervalue = org_identifier
+        agent.save()
 
 
 def submit_fpr_agent():
@@ -112,7 +113,7 @@ def setup_pipeline_in_ss(use_default_config=False):
     # Check if pipeline is already registered on SS
     dashboard_uuid = helpers.get_setting('dashboard_uuid')
     try:
-        storage_service._get_pipeline(dashboard_uuid)
+        storage_service.get_pipeline(dashboard_uuid)
     except Exception:
         logger.warning("SS inaccessible or pipeline not registered.")
     else:
