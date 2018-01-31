@@ -136,7 +136,9 @@ Unable to determine if it completed successfully."""
         # Execute command
         command += " " + arguments
         logger.info('<processingCommand>{%s}%s</processingCommand>', gearman_job.unique, command)
-        exitCode, stdOut, stdError = executeOrRun("command", command, sInput, printing=True, env_updates=env_updates)
+        exitCode, stdOut, stdError = executeOrRun(
+            "command", command, sInput, printing=True, env_updates=env_updates,
+            capture_output=False)
         return cPickle.dumps({"exitCode": exitCode, "stdOut": stdOut, "stdError": stdError})
     except OSError:
         logger.exception('Execution failed')
