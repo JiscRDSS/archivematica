@@ -1,7 +1,3 @@
-
-import argparse
-import sys
-
 import django
 from django.conf import settings as mcpclient_settings
 from django.contrib.auth.models import User
@@ -137,20 +133,3 @@ def run_job(unit_uuid, stdout):
     if stdout:
         print(content)
     return 0
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-i', '--unitIdentifier',
-        action='store', dest='unit_uuid', required=True)
-    parser.add_argument(
-        '-f', '--from',
-        action='store', dest='from',
-        default='ArchivematicaSystem@archivematica.org')
-    parser.add_argument(
-        '--stdout',
-        action='store_true', dest='stdout', default=False)
-    args = parser.parse_args()
-
-    sys.exit(run_job(args.unit_uuid, args.stdout))
