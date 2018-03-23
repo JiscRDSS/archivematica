@@ -9,7 +9,7 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(
     os.path.abspath(os.path.join(THIS_DIR, '../lib/clientScripts')))
 
-from emailOnCompletion import send_email
+from lib.emailOnCompletion import send_email
 
 
 def test_send_email_ok(settings):

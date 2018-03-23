@@ -34,7 +34,7 @@ from main.models import Job, Report
 from custom_handlers import get_script_logger
 from externals.HTML import HTML
 
-import emailOnCompletion
+from lib import emailOnCompletion
 
 
 django.setup()

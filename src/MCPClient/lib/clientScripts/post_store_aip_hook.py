@@ -15,7 +15,7 @@ from main import models
 # archivematicaCommon
 from custom_handlers import get_script_logger
 import elasticSearchFunctions
-import emailOnCompletion
+from lib import emailOnCompletion
 import storageService as storage_service
 
 logger = get_script_logger("archivematica.mcp.client.post_store_aip_hook")
