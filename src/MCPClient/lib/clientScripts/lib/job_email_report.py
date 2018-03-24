@@ -76,8 +76,8 @@ def get_workflow_details(unit_uuid):
         raise ValueError('There are no job with the given SIP of '
                          'Transfer UUID %s', unit_uuid)
 
-    email_content = "Completion report for job with directory {0}\n\n".format(
-        utils.get_directory_name_from_job(jobs))
+    email_content = _('Completion report for job with directory '
+                      '%s\n\n' % utils.get_directory_name_from_job(jobs))
 
     job_details = task_details = ''
     whole_flow_success = True
@@ -98,23 +98,24 @@ def get_workflow_details(unit_uuid):
             for task in job.task_set.all():
                 if len(task_details) < MAX_ATTACHMENT_SIZE and \
                         task.stderror.strip():
-                    task_details += 'Task {0}: {1}'.format(task.execution,
-                                                           task.stderror)
+                    task_details += _('Task %(execution)s: %(stderr)s' % {
+                        'execution': task.execution,
+                        'stderr': task.stderror,
+                    })
 
-    email_content += _("The preservation workflow %s.\n\n") % \
-        ("succeeded" if whole_flow_success else "failed")
     if whole_flow_success:
-        email_content += _("The jobs below failed but did not cause the "
-                           "preservation to fail.\n\n")
+        email_content += _('The preservation workflow succeeded. The jobs '
+                           'below failed but did not cause the preservation '
+                           'to fail.\n\n')
     else:
-        email_content += _("The problems below caused the preservation "
-                           "to fail.\n\n")
+        email_content += _('The preservation workflow failed. The problems '
+                           'below caused the preservation to fail.\n\n')
 
     email_content += job_details
 
     attachment = ""
     if task_details:
-        attachment = _("Detailed Messages\n\n") + task_details
+        attachment = _("Detailed messages\n\n") + task_details
 
     return email_content, attachment
 
