@@ -28,9 +28,10 @@ GENERAL_FAILURE = _('Internal Processing Error. Contact your administrator '
 
 
 def get_recipients():
-    """ Gets the active users to send emails to. If the setting TEST_EMAIL is
-    defined, the email will be sent to that user.
-    TODO For Jisc, we want to send to administrative users only.
+    """Get the active users to send emails to.
+
+    If the setting TEST_EMAIL is defined, the email will be sent to that user.
+    TODO: for Jisc, we want to send to administrative users only.
     """
     email_to = getattr(mcpclient_settings, 'TEST_EMAIL', '')
     if not email_to:
@@ -42,8 +43,9 @@ def get_recipients():
 
 
 def send_email(subject, to, content, attachmentText):
-    """ Send the email with the given parameters. If attachmentText is empty no
-    attachment will be sent.
+    """Send the email with the given parameters.
+
+    If attachmentText is empty noattachment will be sent.
     """
     try:
         logger.info('Sending workflow completion email')
@@ -64,10 +66,10 @@ def send_email(subject, to, content, attachmentText):
 
 
 def get_workflow_details(unit_uuid):
-    """ Get basic details about the ended workflow with the given uuid for
-    sending in an email. If there any any jobs that have failed, get a general
-    message about the failure. Task details from each failed job are added as
-    an attachment.
+    """Get basic details about the ended workflow for sending in an email.
+
+    If there any any jobs that have failed, get a general message about the
+    failure. Task details from each failed job are added as an attachment.
     """
     jobs = models.Job.objects \
         .filter(sipuuid=unit_uuid).order_by('-createdtime')
@@ -78,8 +80,7 @@ def get_workflow_details(unit_uuid):
     email_content = "Completion report for job with directory {0}\n\n".format(
         utils.get_directory_name_from_job(jobs))
 
-    job_details = ""
-    task_details = ""
+    job_details = task_details = ''
     whole_flow_success = True
     for job in jobs:
         if job.currentstep == models.Job.STATUS_FAILED:
@@ -90,7 +91,7 @@ def get_workflow_details(unit_uuid):
 
             # TODO This check is done in the UI but looks unreliable to me. Is
             # it better to check the microservicechainlink ID, or some other
-            #   measure of failure?
+            # measure of failure?
             if job.microservicechainlink.microservicegroup in \
                     ('Failed SIP', 'Failed transfer'):
                 whole_flow_success = False
@@ -120,6 +121,7 @@ def get_workflow_details(unit_uuid):
 
 
 def run_job(unit_uuid):
+    """Generate and send job email report."""
     to = get_recipients()
     if not to:
         raise Exception('Nobody to send it to. Please add users with valid '
