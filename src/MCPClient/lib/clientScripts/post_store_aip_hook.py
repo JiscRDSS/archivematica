@@ -125,7 +125,13 @@ def post_store_hook(sip_uuid):
     # DSPACE HANDLE TO ARCHIVESSPACE
     dspace_handle_to_archivesspace(sip_uuid)
 
-    run_report(sip_uuid)
+    try:
+        run_report(sip_uuid)
+    except Exception as err:
+        # Do our best effort but don't interrupt the script.
+        logger.error('The job email report could not be sent: %s',
+                     err, exc_info=True)
+        pass
 
     # POST-STORE CALLBACK
     storage_service.post_store_aip_callback(sip_uuid)
