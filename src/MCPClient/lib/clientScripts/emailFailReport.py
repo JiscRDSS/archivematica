@@ -211,4 +211,4 @@ if __name__ == '__main__':
     content = get_content_for(args.unit_type, args.unit_name, args.unit_uuid, html=False)
     store_report(content, args.unit_type, args.unit_name, args.unit_uuid)
 
-    run_job(args.unit_uuid, False)
+    run_job(args.unit_uuid)

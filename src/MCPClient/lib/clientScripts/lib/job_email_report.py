@@ -117,7 +117,7 @@ def get_workflow_details(unit_uuid):
     return email_content, attachment
 
 
-def run_job(unit_uuid, stdout):
+def run_job(unit_uuid):
     to = get_recipients()
     if not to:
         logger.error('Nobody to send it to. Please add users with valid email '
@@ -130,6 +130,5 @@ def run_job(unit_uuid, stdout):
     content, attachment = get_workflow_details(unit_uuid)
     send_email(subject, to, content, attachment)
 
-    if stdout:
-        print(content)
+
     return 0
