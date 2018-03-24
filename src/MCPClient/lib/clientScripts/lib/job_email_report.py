@@ -1,3 +1,5 @@
+"""Generate and send failing jobs email report."""
+
 import django
 from django.conf import settings as mcpclient_settings
 from django.contrib.auth.models import User
