@@ -1,6 +1,5 @@
 """Generate and send failing jobs email report."""
 
-import django
 from django.conf import settings as mcpclient_settings
 from django.contrib.auth.models import User
 from django.core.mail.message import EmailMessage
@@ -11,8 +10,6 @@ from contrib import utils
 from custom_handlers import get_script_logger
 from main import models
 from email.mime.text import MIMEText
-
-django.setup()
 
 logger = get_script_logger('archivematica.mcp.client.emailOnCompletion')
 
