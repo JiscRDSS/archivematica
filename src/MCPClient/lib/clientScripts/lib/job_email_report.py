@@ -21,16 +21,11 @@ MAX_ATTACHMENT_SIZE = 100000
 def get_recipients():
     """Get the active users to send emails to.
 
-    If the setting TEST_EMAIL is defined, the email will be sent to that user.
     TODO: for Jisc, we want to send to administrative users only.
     """
-    email_to = getattr(mcpclient_settings, 'TEST_EMAIL', '')
-    if not email_to:
-        return User.objects \
-            .filter(is_active=True).values_list('email', flat=True) \
-            .exclude(email__in=['demo@example.com', ''])
-    else:
-        return [email_to]
+    return User.objects \
+        .filter(is_active=True).values_list('email', flat=True) \
+        .exclude(email__in=['demo@example.com', ''])
 
 
 def send_email(subject, to, content, attachment_text):
