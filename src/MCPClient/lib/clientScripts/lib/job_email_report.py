@@ -54,7 +54,7 @@ def send_email(subject, to, content, attachmentText):
             mail.attach(attachment)
 
         return mail.send()
-    except:
+    except Exception:
         logger.exception('Report email was not delivered')
         raise
     else:
