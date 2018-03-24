@@ -63,7 +63,7 @@ def get_workflow_details(unit_uuid):
                          'Transfer UUID %s', unit_uuid)
 
     email_content = _('Completion report for job with directory '
-                      '%s\n\n' % utils.get_directory_name_from_job(jobs))
+                      '%s.\n\n' % utils.get_directory_name_from_job(jobs))
 
     general_failure = _('Internal Processing Error. '
                         'Contact your administrator for help.')
