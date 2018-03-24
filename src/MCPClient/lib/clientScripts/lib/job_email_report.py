@@ -108,7 +108,7 @@ def get_workflow_details(unit_uuid):
     return email_content, attachment
 
 
-def run_job(unit_uuid):
+def run_report(unit_uuid):
     """Generate and send job email report."""
     to = get_recipients()
     if not to:
