@@ -93,8 +93,8 @@ def get_workflow_details(unit_uuid):
 
     if whole_flow_success:
         email_content += _('The preservation workflow succeeded. The jobs '
-                           'below failed but did not cause the preservation '
-                           'to fail.\n\n')
+                           'below (if any) failed but did not cause the '
+                           'preservation to fail.\n\n')
     else:
         email_content += _('The preservation workflow failed. The problems '
                            'below caused the preservation to fail.\n\n')
