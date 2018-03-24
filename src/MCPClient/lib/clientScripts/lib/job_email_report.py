@@ -17,14 +17,8 @@ django.setup()
 logger = get_script_logger('archivematica.mcp.client.emailOnCompletion')
 
 
-FAILED_JOB_STEP = 4
-
-# Bytes. Attachment can have messages from every file so limit this.
+# Maximum size of the task details text stream in bytes.
 MAX_ATTACHMENT_SIZE = 100000
-
-
-GENERAL_FAILURE = _('Internal Processing Error. Contact your administrator '
-                    'for help.')
 
 
 def get_recipients():
@@ -79,6 +73,8 @@ def get_workflow_details(unit_uuid):
     email_content = _('Completion report for job with directory '
                       '%s\n\n' % utils.get_directory_name_from_job(jobs))
 
+    general_failure = _('Internal Processing Error. '
+                        'Contact your administrator for help.')
     job_details = task_details = ''
     whole_flow_success = True
     for job in jobs:
@@ -86,7 +82,7 @@ def get_workflow_details(unit_uuid):
             job_details += _('Job failed: (%s)\n') % job.jobtype
             messages = job.microservicechainlink.jobfailmessage_set.all()
             job_details += '        {0}\n'.format(
-                messages[0].message if messages.exists() else GENERAL_FAILURE)
+                messages[0].message if messages.exists() else general_failure)
 
             # TODO This check is done in the UI but looks unreliable to me. Is
             # it better to check the microservicechainlink ID, or some other
