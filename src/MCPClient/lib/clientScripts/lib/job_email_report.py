@@ -120,15 +120,9 @@ def get_workflow_details(unit_uuid):
 def run_job(unit_uuid):
     to = get_recipients()
     if not to:
-        logger.error('Nobody to send it to. Please add users with valid email '
-                     'addresses in the dashboard.')
-        return 1
-
-    subject = _('Archivematica Completion Report for %s') % (unit_uuid)
-
+        raise Exception('Nobody to send it to. Please add users with valid '
+                        'email addresses in the dashboard.')
     # Generate email message and send it.
+    subject = _('Archivematica Completion Report for %s') % (unit_uuid)
     content, attachment = get_workflow_details(unit_uuid)
     send_email(subject, to, content, attachment)
-
-
-    return 0
