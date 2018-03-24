@@ -42,21 +42,20 @@ def get_recipients():
         return [email_to]
 
 
-def send_email(subject, to, content, attachmentText):
+def send_email(subject, to, content, attachment_text):
     """Send the email with the given parameters.
 
-    If attachmentText is empty noattachment will be sent.
+    If attachment_text is empty no attachment will be sent.
     """
     try:
         logger.info('Sending workflow completion email')
         mail = EmailMessage(subject, content,
                             mcpclient_settings.DEFAULT_FROM_EMAIL, to)
-        if attachmentText:
-            attachment = MIMEText(attachmentText)
+        if attachment_text:
+            attachment = MIMEText(attachment_text)
             attachment.add_header('Content-Disposition', 'attachment; '
                                   'filename=TaskDetails.txt')
             mail.attach(attachment)
-
         return mail.send()
     except Exception:
         logger.exception('Report email was not delivered')
