@@ -50,6 +50,10 @@ def send_email(subject, to, content, attachment_text):
         logger.info('Report sent successfully!')
 
 
+class PreservationFailedError(Exception):
+    """Used to communicate that the preservation has failed."""
+
+
 def get_workflow_details(unit_uuid):
     """Get basic details about the ended workflow for sending in an email.
 
@@ -68,7 +72,6 @@ def get_workflow_details(unit_uuid):
     general_failure = _('Internal Processing Error. '
                         'Contact your administrator for help.')
     job_details = task_details = ''
-    whole_flow_success = True
     for job in jobs:
         if job.currentstep == models.Job.STATUS_FAILED:
             job_details += _('Job failed: (%s)\n') % job.jobtype
@@ -81,7 +84,7 @@ def get_workflow_details(unit_uuid):
             # measure of failure?
             if job.microservicechainlink.microservicegroup in \
                     ('Failed SIP', 'Failed transfer'):
-                whole_flow_success = False
+                raise PreservationFailedError
 
             for task in job.task_set.all():
                 if len(task_details) < MAX_ATTACHMENT_SIZE and \
@@ -91,15 +94,13 @@ def get_workflow_details(unit_uuid):
                         'stderr': task.stderror,
                     })
 
-    if whole_flow_success:
+    if job_details:
         email_content += _('The preservation workflow succeeded. The jobs '
                            'below (if any) failed but did not cause the '
                            'preservation to fail.\n\n')
+        email_content += job_details
     else:
-        email_content += _('The preservation workflow failed. The problems '
-                           'below caused the preservation to fail.\n\n')
-
-    email_content += job_details
+        email_content += _('The preservation workflow succeeded.\n\n')
 
     attachment = ""
     if task_details:
@@ -116,5 +117,10 @@ def run_report(unit_uuid):
                         'email addresses in the dashboard.')
     # Generate email message and send it.
     subject = _('Archivematica Completion Report for %s') % (unit_uuid)
-    content, attachment = get_workflow_details(unit_uuid)
-    send_email(subject, to, content, attachment)
+    try:
+        content, attachment = get_workflow_details(unit_uuid)
+    except PreservationFailedError:
+        logger.info('Report is not going to be sent because it has been'
+                    ' determined that the preservation failed.')
+    else:
+        send_email(subject, to, content, attachment)
