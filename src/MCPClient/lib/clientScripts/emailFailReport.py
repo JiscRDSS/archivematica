@@ -34,8 +34,6 @@ from main.models import Job, Report
 from custom_handlers import get_script_logger
 from externals.HTML import HTML
 
-from lib.job_email_report import run_report
-
 
 django.setup()
 
@@ -210,5 +208,3 @@ if __name__ == '__main__':
     # Generate report in plain text and store it in the database
     content = get_content_for(args.unit_type, args.unit_name, args.unit_uuid, html=False)
     store_report(content, args.unit_type, args.unit_name, args.unit_uuid)
-
-    run_report(args.unit_uuid)
